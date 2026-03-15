@@ -1,23 +1,31 @@
-# RAG Approaches Comparison
+# Кращі практики в точному землеробстві
 
-## 1. Naive RAG
-The simplest approach: split documents into fixed-size chunks, embed them, and retrieve the top-k most similar chunks for a given query.
+Точне землеробство є сучасним підходом до агровиробництва, що дозволяє оптимізувати використання ресурсів, підвищити врожайність та зменшити витрати. Ось кілька кращих практик, які можуть бути корисними для аграріїв:
 
-**Pros:** Simple to implement, works well for straightforward queries.
-**Cons:** Chunks may lose context, retrieval quality depends heavily on chunk size.
+## 1. Аналіз ґрунту
+- **Регулярний аналіз ґрунту**: Важливо проводити аналіз ґрунту щорічно, щоб визначити його склад, pH, вміст поживних речовин та вологу. Це дозволяє точно визначити потреби рослин у добривах.
+- **Зонування полів**: Використання картографування для визначення зон продуктивності на полях, що дозволяє вносити добрива та засоби захисту рослин диференційовано.
 
-## 2. Sentence-Window Retrieval
-Embed individual sentences but retrieve the surrounding window of sentences (e.g., 2 sentences before and after) to provide more context.
+## 2. Використання технологій
+- **GPS та дронів**: Використання GPS-технологій для точного контролю за посівами та обробітком ґрунту. Дрони можуть допомогти в моніторингу стану рослин та виявленні проблем на ранніх стадіях.
+- **Автопілоти та системи відключення секцій**: Впровадження автоматизованих систем для сівалок, які дозволяють зменшити витрати на насіння та добрива, запобігаючи перекриттю.
 
-**Pros:** More precise retrieval with better context preservation.
-**Cons:** More complex indexing, may still miss broader document context.
+## 3. Диференційоване внесення добрив
+- **Оптимізація норм внесення**: Внесення добрив відповідно до потреб рослин у різних зонах поля. Це дозволяє зменшити витрати на добрива та підвищити їх ефективність.
+- **Використання мікроелементів**: Внесення калію та інших мікроелементів у залежності від потреби конкретних ділянок поля.
 
-## 3. Parent-Child Retrieval
-Create a hierarchy: embed smaller child chunks for retrieval, but return the larger parent chunk to the LLM for generation.
+## 4. Моніторинг та управління
+- **Моніторинг стану рослин**: Використання датчиків для моніторингу вологості ґрунту, температури та інших факторів, що впливають на ріст рослин.
+- **Агроконсалтинг**: Співпраця з агроконсультантами для отримання рекомендацій щодо технологій вирощування та управління ресурсами.
 
-**Pros:** Best of both worlds — precise retrieval with full context.
-**Cons:** Most complex to implement, requires careful parent-child mapping.
+## 5. Освіта та навчання
+- **Постійне навчання**: Аграрії повинні постійно вдосконалювати свої знання про нові технології та методи точного землеробства.
+- **Обмін досвідом**: Налагодження зв'язків між фермерами для обміну досвідом та кращими практиками.
 
-## Sources
-- https://example.com/rag-comparison
-- https://example.com/advanced-rag-techniques
+## Висновок
+Точне землеробство є потужним інструментом для підвищення ефективності агровиробництва. Впровадження сучасних технологій, регулярний аналіз ґрунту та диференційоване внесення добрив можуть суттєво покращити результати господарств.
+
+## Джерела
+- [Точне землеробство: секрети високих врожаїв та ефективності](https://www.bednar.com/uk/blog/tochne-zemlerobstvo-sekrety-vysokykh-vrozhaiv-ta-efektyvnosti/)
+- [Перспективи та особливості точного землеробства](https://agroexp.com.ua/uk/perspektivy-i-osobennosti-tochnogo-zemledeliya)
+- [Технології точного землеробства та практика їхнього впровадження](https://propozitsiya.com/articles/tekhnolohiyi-vyroshchuvannya/tekhnolohiyi-tochnoho-zemlerobstva-ta-praktyka-yikhnoho)
