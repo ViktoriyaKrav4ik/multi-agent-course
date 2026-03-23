@@ -1,4 +1,8 @@
+from langchain_core.messages import HumanMessage
+
 from agent import agent
+
+CONFIG = {"configurable": {"thread_id": "default"}}
 
 
 def main():
@@ -19,13 +23,15 @@ def main():
             print("Goodbye!")
             break
 
-        for chunk in agent.stream(
-            {"messages": [("user", user_input)]},
-        ):
-            if "agent" in chunk and "messages" in chunk["agent"]:
-                for msg in chunk["agent"]["messages"]:
-                    if hasattr(msg, "content") and msg.content:
-                        print(f"\nAgent: {msg.content}")
+        result = agent.invoke(
+            {"messages": [HumanMessage(content=user_input)]},
+            config=CONFIG,
+        )
+        messages = result.get("messages", [])
+        if messages:
+            last = messages[-1]
+            if hasattr(last, "content") and last.content:
+                print(f"\nAgent: {last.content}")
 
 
 if __name__ == "__main__":

@@ -104,3 +104,14 @@ You: Що таке RAG і які є підходи до retrieval?
 
 Agent: RAG — це техніка, де...
 ```
+
+---
+
+### Швидкий старт
+
+1. Скопіюйте `.env.example` → `.env`, додайте `OPENAI_API_KEY` (опційно `MODEL_NAME`).
+2. `pip install -r requirements.txt`
+3. Покладіть PDF/TXT/MD у `data/`, потім з каталогу `homework-lesson-5`: `python ingest.py`
+4. `python main.py`
+
+Переглянути структуру індексу на диску та приклади чанків: `python inspect_index.py` (опційно `--sample 10`). Зв’язок «текст ↔ перші координати вектора»: `python inspect_index.py --text-vector 5`.
