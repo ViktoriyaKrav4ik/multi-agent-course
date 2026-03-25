@@ -4,15 +4,6 @@
 
 Мультиагентна система для створення контенту для блогу або соцмереж. Планує, пише та перевіряє якість перед публікацією.
 
-## Рекомендований стек
-
-- **Python 3.11+**, langgraph, langchain, langchain-community, pydantic v2
-- **RAG:** langchain-text-splitters, будь-який vector store (FAISS, Chroma тощо) (chunk size ~500–1000 токенів)
-- **Embedding:** `text-embedding-3-small` (OpenAI) або будь-яка інша embedding-модель
-- **LLM:** OpenAI GPT-4o-mini або Anthropic Claude Sonnet (баланс ціни/якості)
-- **Моніторинг:** langfuse або langsmith (підключається як callback handler до LangGraph)
-- **LLM-as-a-Judge тести:** окремі Python-скрипти або pytest, які запускають компоненти з тестовими даними і оцінюють output через LLM
-
 ## Архітектурний патерн
 
 **Основний патерн:** комбінація двох патернів Anthropic: Prompt Chaining (Strategist → Writer — лінійний pipeline з HITL gate між ними) + Evaluator-Optimizer (Writer ↔ Editor — цикл генерації та оцінки якості).
@@ -21,11 +12,17 @@
 
 ## Агенти та мінімальні інструменти
 
-| Агент | Роль / Відповідальність | Інструменти (мінімум) |
-|-------|------------------------|----------------------|
-| **Content Strategist** (Planning) | Отримує бриф. Досліджує тему, створює контент-план. | • DuckDuckGo Search — тренди, конкуренти · • RAG — style guide та приклади контенту |
-| **Writer** (Execution) | Пише статтю/пост за планом. Може шукати додаткові факти. | • DuckDuckGo Search — факти, статистика · • File System tool — збереження готового контенту |
-| **Editor** (Assurance) | Рев'ює контент: tone, фактична точність, структура, відповідність плану. Повертає structured feedback або затверджує. | • DuckDuckGo Search — fact-check · • LLM structured output — EditFeedback |
+**Content Strategist** (Planning)
+- Роль: отримує бриф, досліджує тему, створює контент-план
+- Інструменти: DuckDuckGo Search (тренди, конкуренти), RAG (style guide та приклади контенту)
+
+**Writer** (Execution)
+- Роль: пише статтю/пост за планом, може шукати додаткові факти
+- Інструменти: DuckDuckGo Search (факти, статистика), File System tool (збереження готового контенту)
+
+**Editor** (Assurance)
+- Роль: рев'ює контент (tone, фактична точність, структура, відповідність плану), повертає structured feedback або затверджує
+- Інструменти: DuckDuckGo Search (fact-check), LLM structured output (EditFeedback)
 
 ### Навіщо кожен інструмент (real-world motivation)
 

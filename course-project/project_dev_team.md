@@ -4,16 +4,6 @@
 
 Мультиагентна система, що симулює AI-команду розробки за патерном Planner–Coder–Reviewer з Лекції 7. На вхід отримує user story, аналізує вимоги, пише код та перевіряє результат через автоматизований рев'ю та тестування.
 
-## Рекомендований стек
-
-- **Python 3.11+**, langgraph, langchain, langchain-community, pydantic v2
-- **RAG:** langchain-text-splitters, будь-який vector store (FAISS, Chroma тощо) (chunk size ~500–1000 токенів)
-- **Embedding:** `text-embedding-3-small` (OpenAI) або будь-яка інша embedding-модель
-- **LLM:** OpenAI GPT-4o-mini або Anthropic Claude Sonnet (баланс ціни/якості)
-- **Python REPL:** langchain_experimental `PythonREPL` з timeout та обмеженнями
-- **Моніторинг:** langfuse або langsmith (підключається як callback handler до LangGraph)
-- **LLM-as-a-Judge тести:** окремі Python-скрипти або pytest, які запускають компоненти з тестовими даними і оцінюють output через LLM
-
 ## Архітектурний патерн
 
 **Основний патерн:** Evaluator-Optimizer (Anthropic) — цикл генерації та оцінки. Developer генерує код, QA оцінює якість зі structured output. Якщо якість недостатня — повертаємось до Developer з feedback. Лінійна частина (User → BA → Developer) — Prompt Chaining з gate (HITL затвердження специфікації).
@@ -22,11 +12,17 @@
 
 ## Агенти та мінімальні інструменти
 
-| Агент | Роль / Відповідальність | Інструменти (мінімум) |
-|-------|------------------------|----------------------|
-| **Business Analyst** (Planning) | Отримує задачу від користувача. Досліджує контекст, формує структуровану специфікацію. | • DuckDuckGo Search — контекст, документація · • RAG — пошук по документації мови/фреймворку |
-| **Developer** (Execution) | Отримує специфікацію. Пише код, створює файли проєкту на диску. | • DuckDuckGo Search — бібліотеки, приклади · • Python REPL tool — виконання та тестування коду · • File System tool — створення файлів проєкту |
-| **QA Engineer** (Assurance) | Рев'ює код. Запускає його, перевіряє коректність, edge cases, відповідність специфікації. Повертає structured feedback або затверджує. | • Python REPL tool — запуск коду та тестів · • File System tool — читання файлів, створених Developer |
+**Business Analyst** (Planning)
+- Роль: отримує задачу від користувача, досліджує контекст, формує структуровану специфікацію
+- Інструменти: DuckDuckGo Search (контекст, документація), RAG (пошук по документації мови/фреймворку)
+
+**Developer** (Execution)
+- Роль: отримує специфікацію, пише код, створює файли проєкту на диску
+- Інструменти: DuckDuckGo Search (бібліотеки, приклади), Python REPL tool (виконання та тестування коду), File System tool (створення файлів проєкту)
+
+**QA Engineer** (Assurance)
+- Роль: рев'ює код, запускає його, перевіряє коректність, edge cases, відповідність специфікації
+- Інструменти: Python REPL tool (запуск коду та тестів), File System tool (читання файлів, створених Developer)
 
 ### Навіщо кожен інструмент (real-world motivation)
 
@@ -74,7 +70,7 @@
 | User | BA | Feedback (якщо специфікацію не затверджено) → BA переробляє spec |
 | BA | Developer | Затверджена SpecOutput |
 | Developer | QA | CodeOutput |
-| QA | Developer | ReviewOutput (verdict=REVISION_NEEDED, issues[], score) — макс. 3 ітерації |
+| QA | Developer | ReviewOutput (verdict=REVISION_NEEDED, issues[], score) — макс. 5 ітерацій |
 | QA | User | ReviewOutput (verdict=APPROVED) + фінальний код |
 
 ## Workflow (LangGraph)
@@ -86,7 +82,7 @@
 5. **Developer** пише код (Python REPL + file write), повертає CodeOutput. ⚠️ LLM-згенерований код потрібно запускати з обмеженнями: timeout, заборонені модулі (os, subprocess, shutil), обмеження на розмір output.
 6. **Developer → QA:** передача CodeOutput.
 7. **QA** оцінює код, повертає ReviewOutput (`with_structured_output`).
-8. **Conditional edge (Command API):** `verdict=REVISION_NEEDED` і `iteration < 3` → Developer з payload (issues + suggestions). Інакше → END.
+8. **Conditional edge (Command API):** `verdict=REVISION_NEEDED` і `iteration < 5` → Developer з payload (issues + suggestions). Інакше → END.
 
 ## Опціональні функції (бонус)
 

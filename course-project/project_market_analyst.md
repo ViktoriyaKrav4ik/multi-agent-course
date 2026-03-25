@@ -4,15 +4,6 @@
 
 Мультиагентна система для дослідження ринку. Analyst збирає дані, Critic критично оцінює (structured debate), Compiler компілює фінальний звіт.
 
-## Рекомендований стек
-
-- **Python 3.11+**, langgraph, langchain, langchain-community, pydantic v2
-- **RAG:** langchain-text-splitters, будь-який vector store (FAISS, Chroma тощо) (chunk size ~500–1000 токенів)
-- **Embedding:** `text-embedding-3-small` (OpenAI) або будь-яка інша embedding-модель
-- **LLM:** OpenAI GPT-4o-mini або Anthropic Claude Sonnet (баланс ціни/якості)
-- **Моніторинг:** langfuse або langsmith (підключається як callback handler до LangGraph)
-- **LLM-as-a-Judge тести:** окремі Python-скрипти або pytest, які запускають компоненти з тестовими даними і оцінюють output через LLM
-
 ## Архітектурний патерн
 
 **Основний патерн:** Evaluator-Optimizer (Anthropic) — Analyst генерує звіт, Critic оцінює якість. Якщо якість недостатня — повертаємось до Analyst з feedback. Фінальна частина (Critic → Compiler) — Prompt Chaining.
@@ -21,11 +12,17 @@
 
 ## Агенти та мінімальні інструменти
 
-| Агент | Роль / Відповідальність | Інструменти (мінімум) |
-|-------|------------------------|----------------------|
-| **Research Analyst** (Execution + Context) | Отримує тему. Шукає дані, тренди, звіти. Компілює чорновик. | • DuckDuckGo Search — ринкові дані, новини · • RAG — пошук по завантажених статтях |
-| **Critic** (Assurance) | Рев'ює чорновик. Перевіряє упередженість, необґрунтовані твердження, логічні прогалини. Повертає structured feedback або затверджує. Роль devil's advocate. | • DuckDuckGo Search — верифікація тверджень · • LLM structured output — CriticFeedback |
-| **Report Compiler** (Execution) | Формує фінальний структурований звіт за визначеною Pydantic-схемою. Зберігає як файл-артефакт. | • File System tool — збереження фінального звіту · • LLM structured output — генерація за схемою |
+**Research Analyst** (Execution + Context)
+- Роль: отримує тему, шукає дані, тренди, звіти, компілює чорновик
+- Інструменти: DuckDuckGo Search (ринкові дані, новини), RAG (пошук по завантажених статтях)
+
+**Critic** (Assurance)
+- Роль: рев'ює чорновик, перевіряє упередженість, необґрунтовані твердження, логічні прогалини. Роль devil's advocate
+- Інструменти: DuckDuckGo Search (верифікація тверджень), LLM structured output (CriticFeedback)
+
+**Report Compiler** (Execution)
+- Роль: формує фінальний структурований звіт за Pydantic-схемою, зберігає як файл-артефакт
+- Інструменти: File System tool (збереження фінального звіту), LLM structured output (генерація за схемою)
 
 ### Навіщо кожен інструмент (real-world motivation)
 
@@ -63,7 +60,7 @@
 |-----|------|-----------------------------------|
 | User | Analyst | Тема та скоуп (topic, scope, focus_areas[]) |
 | Analyst | Critic | DraftReport |
-| Critic | Analyst | CriticFeedback (verdict=NEEDS_REVISION) — макс. 2 ітерації |
+| Critic | Analyst | CriticFeedback (verdict=NEEDS_REVISION) — макс. 5 ітерацій |
 | Analyst | Critic | Оновлений DraftReport + changes_made[] |
 | Critic | Compiler | DraftReport (verdict=APPROVED) |
 | Compiler | User | FinalReport |
@@ -74,7 +71,7 @@
 2. **Analyst** збирає дані (DuckDuckGo + RAG), формує DraftReport. Ключова вимога: `sources` у DraftReport змушує вказувати джерела, а не генерувати факти з повітря.
 3. **Analyst → Critic:** передача DraftReport.
 4. **Critic** аналізує (`with_structured_output` → CriticFeedback). Роль devil's advocate: навмисно шукає слабкі місця, упередженість, необґрунтовані твердження.
-5. **Conditional edge (Command):** `verdict=NEEDS_REVISION` і `iteration < 2` → Analyst з payload (`issues`, `missing_perspectives`). Інакше → Compiler.
+5. **Conditional edge (Command):** `verdict=NEEDS_REVISION` і `iteration < 5` → Analyst з payload (`issues`, `missing_perspectives`). Інакше → Compiler.
 6. **Compiler** формує FinalReport за Pydantic-схемою. Окремий агент, бо задача інша: не генерувати контент, а структурувати затверджений матеріал.
 7. **Compiler → END:** фінальний звіт зберігається як `.md`-файл.
 
