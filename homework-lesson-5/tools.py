@@ -37,7 +37,11 @@ def web_search(query: str) -> str:
         href = r.get("href", "")
         body = (r.get("body") or "").strip()
         lines.append(f"{i}. {title}\n   URL: {href}\n   {body}")
-    return "\n\n".join(lines)
+    text = "\n\n".join(lines)
+    max_len = settings.max_web_search_length
+    if len(text) > max_len:
+        text = text[:max_len] + "\n\n[... результати пошуку обрізано ...]"
+    return text
 
 
 @tool

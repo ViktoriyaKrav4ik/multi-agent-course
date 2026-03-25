@@ -36,7 +36,11 @@ def web_search(query: str) -> str:
         href = r.get("href", "")
         body = (r.get("body") or "").strip()
         lines.append(f"{i}. {title}\n   URL: {href}\n   {body}")
-    return "\n\n".join(lines)
+    text = "\n\n".join(lines)
+    max_len = settings.max_web_search_length
+    if len(text) > max_len:
+        text = text[:max_len] + "\n\n[... результати пошуку обрізано ...]"
+    return text
 
 
 @tool
@@ -80,7 +84,9 @@ def write_report(filename: str, content: str) -> str:
     if filename.lower() == "report.md":
         filename = f"report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.md"
 
-    out_dir = settings.output_dir
+    # Абсолютний шлях відносно папки homework-lesson-3 — файл завжди в правильному місці
+    _root = os.path.dirname(os.path.abspath(__file__))
+    out_dir = os.path.join(_root, settings.output_dir)
     os.makedirs(out_dir, exist_ok=True)
     path = os.path.join(out_dir, filename)
 

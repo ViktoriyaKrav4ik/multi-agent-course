@@ -1,4 +1,18 @@
-# Завдання: Research Agent з власним ReAct Loop
+# Research Agent — домашня робота 4
+
+## Опис мого рішення
+
+Власний **ReAct-цикл** на **OpenAI Chat Completions API** (`ResearchAgent` у `agent.py`): у циклі до `max_iterations` з `config.py` викликається модель з `tools` у форматі JSON Schema (`tool_definitions()` у `tools.py`), обробляються `tool_calls`, результати додаються в `messages` — без LangGraph / `create_react_agent`. Памʼять сесії — це той самий список повідомлень (команда `reset` у `main.py` очищає історію).
+
+**Інструменти:** `web_search` (ddgs), `read_url` (trafilatura, обрізання за `max_url_content_length`), `write_report` (каталог `output/`). Для **`web_search`** сукупний текст результатів обрізається за **`max_web_search_length`** перед поверненням у контекст. Додатково в циклі агента є загальний верхній ліміт довжини відповіді tool (захист контексту).
+
+**Запуск:** з каталогу `homework-lesson-4` — `.env` з `OPENAI_API_KEY` (опційно `MODEL_NAME`), `pip install -r requirements.txt`, `python main.py`.
+
+Нижче — **формулювання завдання з курсу** як довідка.
+
+---
+
+## Завдання (текст курсу)
 
 Розширте свого Research Agent з homework-lesson-3 — **замініть `create_react_agent` на власну реалізацію ReAct-циклу** та **покращіть system prompt**, застосувавши техніки промптингу з лекції.
 

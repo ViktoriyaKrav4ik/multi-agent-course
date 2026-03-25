@@ -94,7 +94,11 @@ def web_search(query: str) -> str:
         href = (r.get("href") or "").strip()
         body = (r.get("body") or "").strip()
         lines.append(f"{i}. {title}\n   URL: {href}\n   {body}")
-    return "\n\n".join(lines)
+    text = "\n\n".join(lines)
+    max_len = settings.max_web_search_length
+    if len(text) > max_len:
+        text = text[:max_len] + "\n\n[... search results truncated ...]"
+    return text
 
 
 def read_url(url: str) -> str:

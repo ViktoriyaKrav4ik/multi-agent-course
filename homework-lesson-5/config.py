@@ -18,6 +18,7 @@ class Settings(BaseSettings):
     # Web search
     max_search_results: int = 5
     max_url_content_length: int = 5000
+    max_web_search_length: int = 8000
 
     # RAG
     embedding_model: str = "text-embedding-3-small"

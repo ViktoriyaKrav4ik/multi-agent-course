@@ -1,4 +1,20 @@
-# Завдання: Research Agent
+# Research Agent — домашня робота 3
+
+## Опис мого рішення
+
+Інтерактивний research-агент на **LangGraph** (`create_react_agent`) з **OpenAI**-моделлю (`ChatOpenAI`, параметри з `.env`). Інструменти: `web_search` (DuckDuckGo через `ddgs`), `read_url` (trafilatura), `write_report` (збереження Markdown у `example_output/`). Діалог у межах одного запуску зберігається через **MemorySaver** і `thread_id` у конфігурації виклику.
+
+**Ліміт кроків:** у `config.py` задано `max_iterations` (опційно з `.env` як `MAX_ITERATIONS`). У `main.py` при `invoke` передається `recursion_limit` (прив’язано до `max_iterations`), щоб граф не міг безкінечно крутити ReAct-цикл.
+
+**Обрізання результатів tools:** довгий текст з `read_url` обрізається до `max_url_content_length`; сукупна відповідь `web_search` — до `max_web_search_length`, щоб не забивати контекстне вікно.
+
+**Запуск:** `pip install -r requirements.txt`, у каталозі `homework-lesson-3` створити `.env` з `OPENAI_API_KEY` (і за бажанням `MODEL_NAME`, `MAX_ITERATIONS` тощо), потім `python main.py`.
+
+Нижче залишено **формулювання завдання з курсу** як довідку.
+
+---
+
+## Завдання (текст курсу)
 
 Побудуйте агента, який отримує питання від користувача, самостійно шукає інформацію через набір інструментів, збирає знахідки, і генерує структурований Markdown-звіт.
 

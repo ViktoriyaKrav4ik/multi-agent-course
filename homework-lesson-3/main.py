@@ -1,9 +1,16 @@
 from langchain_core.messages import HumanMessage
 
 from agent import agent
+from config import Settings
 
-# Щоб агент пам'ятав діалог у межах сесії (вимога домашки 3)
-CONFIG = {"configurable": {"thread_id": "default"}}
+settings = Settings()
+
+# Пам'ять у межах сесії + ліміт кроків графа (ReAct: кілька вузлів на один «крок» моделі)
+def _invoke_config() -> dict:
+    return {
+        "configurable": {"thread_id": "default"},
+        "recursion_limit": settings.max_iterations * 2 + 12,
+    }
 
 
 def main():
@@ -26,7 +33,7 @@ def main():
 
         result = agent.invoke(
             {"messages": [HumanMessage(content=user_input)]},
-            config=CONFIG,
+            config=_invoke_config(),
         )
         messages = result.get("messages", [])
         if messages:

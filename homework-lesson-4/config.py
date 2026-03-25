@@ -10,6 +10,7 @@ class Settings(BaseSettings):
 
     max_search_results: int = 5
     max_url_content_length: int = 5000
+    max_web_search_length: int = 8000
     output_dir: str = "output"
     max_iterations: int = 12
 

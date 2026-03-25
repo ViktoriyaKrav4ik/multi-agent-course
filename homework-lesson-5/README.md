@@ -1,4 +1,18 @@
-# Завдання: Research Agent з RAG-системою
+# Research Agent з RAG — домашня робота 5
+
+## Опис мого рішення
+
+Агент на **LangGraph** `create_react_agent` з інструментами `knowledge_search`, `web_search`, `read_url`, `write_report`. Локальна база: **ingest** (`ingest.py`) будує FAISS + метадані; **retriever** (`retriever.py`) — гібридний пошук (semantic + BM25), опційно cross-encoder reranking (`USE_RERANKING` у `.env`). Для Windows з не-ASCII у шляху проєкту індекс можна винести в `RAG_INDEX_DIR` (див. `get_rag_index_path` у `config.py`).
+
+**Контекст і ліміти:** `read_url` обрізається за `max_url_content_length`; **`web_search`** — за **`max_web_search_length`**. При виклику агента передається **`recursion_limit`**, узгоджений з **`max_iterations`** у `config.py` / `.env`, щоб ReAct-граф не зацикливився.
+
+**Запуск:** `.env` з `OPENAI_API_KEY` (шаблон — `.env.example`), `pip install -r requirements.txt`, `python ingest.py`, потім `python main.py`. Звіти — у `output/`.
+
+Нижче — **формулювання завдання з курсу**.
+
+---
+
+## Завдання (текст курсу)
 
 Розширте свого Research Agent з `homework-lesson-3` — додайте **RAG-інструмент** з гібридним пошуком та reranking, щоб агент міг шукати не лише в інтернеті, а й у локальній базі знань.
 
