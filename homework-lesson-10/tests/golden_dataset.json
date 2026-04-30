@@ -1,0 +1,77 @@
+[
+  {
+    "input": "Compare naive RAG vs sentence-window retrieval vs parent-child chunking",
+    "expected_output": "Naive RAG splits documents into fixed-size chunks and retrieves the most similar ones. Sentence-window retrieval uses individual sentences for matching but expands the context window around them for generation. Parent-child chunking indexes small child chunks for precise retrieval but passes their larger parent chunks to the LLM for richer context. Sentence-window and parent-child approaches generally outperform naive RAG in accuracy but add complexity.",
+    "category": "happy_path"
+  },
+  {
+    "input": "What are the main benefits of multi-agent systems over single-agent approaches?",
+    "expected_output": "Multi-agent systems enable specialization (each agent focuses on a specific task), parallel processing, better scalability, and fault tolerance. They allow complex workflows like plan-research-critique cycles that a single agent cannot manage effectively. The division of labor improves overall quality and allows iterative refinement.",
+    "category": "happy_path"
+  },
+  {
+    "input": "Explain how BM25 and semantic search differ and when to combine them",
+    "expected_output": "BM25 is a keyword-based ranking algorithm that scores documents by term frequency and inverse document frequency. Semantic search uses vector embeddings to capture meaning beyond exact keyword matches. Combining them in a hybrid approach (ensemble retrieval) leverages BM25's precision for exact terms and semantic search's ability to find conceptually related content, typically improving recall and relevance.",
+    "category": "happy_path"
+  },
+  {
+    "input": "How does cross-encoder reranking improve retrieval quality in RAG systems?",
+    "expected_output": "Cross-encoder reranking takes the top candidates from an initial retrieval stage and re-scores each query-document pair jointly using a transformer model. Unlike bi-encoders that encode query and document separately, cross-encoders attend to both simultaneously, capturing fine-grained relevance. This improves precision at the cost of higher latency, making it a common second-stage retrieval component.",
+    "category": "happy_path"
+  },
+  {
+    "input": "What is the role of a Supervisor agent in multi-agent orchestration?",
+    "expected_output": "A Supervisor agent coordinates the workflow between specialized sub-agents. It decides which agent to call next, passes context between them, manages iteration loops (e.g., research-critique cycles), enforces stopping conditions, and aggregates the final output. It acts as the central orchestrator without performing the specialized tasks itself.",
+    "category": "happy_path"
+  },
+  {
+    "input": "AI",
+    "expected_output": "The query is too vague. The system should attempt to interpret it broadly as artificial intelligence research, produce a general overview, or ask for clarification. The response should still be structured and contain factual information about AI.",
+    "category": "edge_case"
+  },
+  {
+    "input": "Порівняй FAISS та Pinecone для production vector search",
+    "expected_output": "FAISS — бібліотека від Meta для локального векторного пошуку, безкоштовна, але потребує самостійного управління інфраструктурою. Pinecone — managed cloud-сервіс з автоматичним масштабуванням, але платний. FAISS підходить для менших проєктів або on-premise, Pinecone — для production з високим навантаженням.",
+    "category": "edge_case"
+  },
+  {
+    "input": "What is the exact cost per token for every LLM provider as of today and compare their latency in milliseconds?",
+    "expected_output": "The system should acknowledge that exact real-time pricing and latency benchmarks change frequently. It should provide approximate recent pricing for major providers (OpenAI, Anthropic, Google) and note that latency depends on model size, region, and load. The response should include sources with dates.",
+    "category": "edge_case"
+  },
+  {
+    "input": "Compare every machine learning framework ever created in detail",
+    "expected_output": "The query is extremely broad. The system should narrow the scope to the most popular frameworks (TensorFlow, PyTorch, JAX, scikit-learn, etc.) and compare them on key dimensions like ease of use, performance, ecosystem, and production readiness, rather than attempting an exhaustive list.",
+    "category": "edge_case"
+  },
+  {
+    "input": "Explain quantum computing applications in drug discovery and also review the latest JavaScript frameworks",
+    "expected_output": "The system should recognize this as two unrelated topics and either address both separately or focus on the primary one. The response should acknowledge the dual nature of the request and provide structured information for each topic.",
+    "category": "edge_case"
+  },
+  {
+    "input": "How to cook pasta carbonara?",
+    "expected_output": "This query is outside the research/technical domain. The system should either politely decline or provide a minimal response noting that this is not within its research expertise.",
+    "category": "failure_case"
+  },
+  {
+    "input": "asdfghjkl zxcvbnm qwerty",
+    "expected_output": "The input is nonsensical. The system should recognize it cannot perform meaningful research on gibberish and respond accordingly, either asking for clarification or stating it cannot process the request.",
+    "category": "failure_case"
+  },
+  {
+    "input": "Write me a love poem with roses and moonlight",
+    "expected_output": "This is a creative writing request, not a research task. The system should recognize the mismatch and either redirect or explain that it is designed for research, not creative writing.",
+    "category": "failure_case"
+  },
+  {
+    "input": "What will the stock price of NVIDIA be next month?",
+    "expected_output": "The system should not make financial predictions. It should explain that stock price prediction is speculative and outside its research scope, or provide general information about NVIDIA without making price forecasts.",
+    "category": "failure_case"
+  },
+  {
+    "input": "Tell me something interesting",
+    "expected_output": "The query is too vague for structured research. The system should either ask for a specific topic or attempt a best-effort response on a general technical topic, acknowledging the ambiguity.",
+    "category": "failure_case"
+  }
+]
