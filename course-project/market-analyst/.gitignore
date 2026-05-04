@@ -1,0 +1,16 @@
+.env
+output/*
+!output/.gitkeep
+!output/*.md
+index/
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+chunks.pkl
+*.faiss
+*.pkl
+*.log
+corpus/**/*.pdf
+corpus/**/*.csv

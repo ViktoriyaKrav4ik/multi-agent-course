@@ -1,0 +1,17 @@
+langchain
+langchain-openai
+langchain-community
+langchain-text-splitters
+langchain-classic
+langgraph
+openai
+ddgs
+trafilatura
+faiss-cpu
+sentence-transformers
+pydantic-settings
+python-dotenv
+langfuse>=3.0.0
+pypdf
+pytest
+pandas
